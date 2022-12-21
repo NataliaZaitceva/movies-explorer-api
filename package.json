@@ -1,0 +1,37 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "lint": "npx eslint .",
+    "dev": "nodemon ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NataliaZaitceva/movies-explorer-api.git"
+  },
+  "author": "Natalia Zaitceva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NataliaZaitceva/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/NataliaZaitceva/movies-explorer-api#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "celebrate": "^15.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongod": "^2.0.0",
+    "mongoose": "^6.8.1",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.20"
+  }
+}
