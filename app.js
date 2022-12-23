@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
@@ -13,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // для приёма ве�
 mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
 app.use(requestLogger);
-
+app.use(helmet());
 app.use('/', require('./routs/index'));
 
 app.use(errorLogger);
