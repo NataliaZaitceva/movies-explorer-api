@@ -4,6 +4,11 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { MONGO_DEV_URL } = require('./config');
+const errorHandler = require('./middlewares/errorHandler');
+const limiter = require('./middlewares/rateLimit');
+
+const { NODE_ENV, MONGO_URL } = process.env;
 
 const { PORT = 3000 } = process.env;
 
@@ -12,21 +17,16 @@ const app = express();
 app.use(bodyParser.json()); // для собирания JSON-формата
 app.use(bodyParser.urlencoded({ extended: true })); // для приёма веб-страниц внутри POST-запроса
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : MONGO_DEV_URL);
 app.use(requestLogger);
 app.use(helmet());
+app.use(limiter);
 app.use('/', require('./routs/index'));
 
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => {
-  if (err.statusCode) {
-    res.status(err.statusCode).send({ message: err.message });
-  } else {
-    res.status(500).send({ message: 'Произошла ошибка на сервере' });
-  }
-  next();
-});
+
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });

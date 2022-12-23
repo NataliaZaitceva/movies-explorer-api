@@ -4,7 +4,7 @@ const ForbiddenError = require('../Errors/ForbiddenError');
 const Movie = require('../models/movie');
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => res.send({ movies }))
     .catch(next);
 };
@@ -42,7 +42,7 @@ module.exports.createMovie = (req, res, next) => {
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .orFail(() => {
-      throw new NotFoundError(' ID карточки не существует');
+      throw new NotFoundError(' ID фильма не существует');
     })
     .then((user) => {
       if (!user.owner.equals(req.user._id)) {
