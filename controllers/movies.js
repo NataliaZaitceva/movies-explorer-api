@@ -5,13 +5,14 @@ const Movie = require('../models/movie');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    .then((movies) => res.send({ movies }))
+    .populate(['owner'])
+    .then((movies) => { res.send(movies); })
     .catch(next);
 };
 
 module.exports.createMovie = (req, res, next) => {
   const {
-    country, director, duration, year, description, image, trailerLink, thumbnal, movieId,
+    country, director, duration, year, description, image, trailerLink, thumbnail, movieId,
     nameRU, nameEN,
   } = req.body;
   const owner = req.user._id;
@@ -23,7 +24,7 @@ module.exports.createMovie = (req, res, next) => {
     description,
     image,
     trailerLink,
-    thumbnal,
+    thumbnail,
     movieId,
     nameRU,
     nameEN,
@@ -48,7 +49,7 @@ module.exports.deleteMovie = (req, res, next) => {
       if (!user.owner.equals(req.user._id)) {
         throw new ForbiddenError('Переданы некорректные данные');
       }
-      Movie.findByIdAndDelete(req.params.cardId)
+      Movie.findByIdAndDelete(req.params.movieId)
         .then((movie) => res.send({ movie }));
     })
     .catch((err) => {
